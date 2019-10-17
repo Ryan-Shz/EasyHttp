@@ -1,2 +1,2 @@
 # EasyHttp
-a http library based retrofit and rxjava.
+A http library based retrofit and rxjava.
