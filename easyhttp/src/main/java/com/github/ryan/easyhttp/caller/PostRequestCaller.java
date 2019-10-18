@@ -37,10 +37,10 @@ public class PostRequestCaller extends BaseServiceCaller {
     private <T> RequestBody processBody(EasyHttp<T> http) {
         RequestBodyCreator creator = http.getRequestBodyCreator();
         RequestBody requestBody;
+        Map<String, String> params = generateParams(http);
         if (creator != null) {
-            requestBody = creator.createRequestBody();
+            requestBody = creator.createRequestBody(params);
         } else {
-            Map<String, String> params = generateParams(http);
             String content = null;
             if (params != null && !params.isEmpty()) {
                 content = mConverter.toJson(params);

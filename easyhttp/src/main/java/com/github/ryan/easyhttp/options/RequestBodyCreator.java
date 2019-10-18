@@ -1,5 +1,7 @@
 package com.github.ryan.easyhttp.options;
 
+import java.util.Map;
+
 import okhttp3.RequestBody;
 
 /**
@@ -8,6 +10,6 @@ import okhttp3.RequestBody;
  */
 public interface RequestBodyCreator {
 
-    RequestBody createRequestBody();
+    RequestBody createRequestBody(Map<String, String> params);
 
 }
