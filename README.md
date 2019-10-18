@@ -115,11 +115,6 @@ File file = TestHttp.from(File.class)
         .setFullUrl(TEST_FILE_URL)
         .sync()
         .download();
-if (file != null) {
-    toast("download success: " + file.getPath());
-} else {
-    toast("download failed");
-}
 ```
 
 ### 配置选项
@@ -253,7 +248,6 @@ sync()
 
 ```
 EasyHttp.from(TestResult.class)
-				...
 				.sync()
 				.get();
 ```
