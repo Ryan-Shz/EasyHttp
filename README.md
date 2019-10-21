@@ -133,7 +133,7 @@ setFullUrl(String url) // 设置完整路径
 
 当你实现自己的Http扩展类时，可以在类的构造方法中添加setBaseUrl(String baseUrl)来设置基础地址，这样外部在使用时，只需要调用setPath(String path)即可。
 
-### 添加参数
+#### 添加参数
 
 ```
 addParam(String key, String value) // 添加普通参数
@@ -149,7 +149,7 @@ addHeaderParam(String key, Object value) // 添加头部参数
 
 头部参数则会被放入Http请求的Header中。
 
-### 生命周期绑定
+#### 生命周期绑定
 
 EasyHttp通过rxlifecycle来管理请求的生命周期。提供以下两个配置方法：
 
@@ -167,7 +167,7 @@ EasyHttp.from(TestResult.class)
 				.bindLifecycleUtilEvent(this.bindUntilEvent(ActivityEvent.PAUSE))
 ```
 
-### 参数拦截器
+#### 参数拦截器
 
 参数拦截器用来拦截参数的创建过程。通过参数拦截器，我们可以很方便的给指定的Http扩展类添加公共的头部参数和普通参数。
 
@@ -200,7 +200,7 @@ public interface ParamsInterceptor {
 }
 ```
 
-### 定制Retrofit对象
+#### 定制Retrofit对象
 
 EasyHttp使用Retrofit来发起请求，每个请求都可以指定一个自定义的retrofit对象来发起请求。
 
@@ -208,7 +208,7 @@ EasyHttp使用Retrofit来发起请求，每个请求都可以指定一个自定�
 EasyHttp.retrofit(Retrofit retrofit)
 ```
 
-### 重试选项
+#### 重试选项
 
 ```
 EasyHttp.from(TestResult.class)
@@ -220,7 +220,7 @@ EasyHttp.from(TestResult.class)
 1. count: 重试次数 
 2. delay: 延迟多少ms后重试
 
-### 延迟请求选项
+#### 延迟请求选项
 
 通过延迟请求选项，可以延迟发起请求：
 
@@ -230,7 +230,7 @@ setDelay(int delay)
 
 delay为延迟的时长，单位为ms.
 
-### 文件下载选项
+#### 文件下载选项
 
 ```
 targetFile(File targetFile)
@@ -238,7 +238,7 @@ targetFile(File targetFile)
 
 将下载的文件保存到targetFile中。
 
-### 同步请求选项
+#### 同步请求选项
 
 ```d
 sync()
@@ -252,7 +252,7 @@ EasyHttp.from(TestResult.class)
 				.get();
 ```
 
-### 数据转换器
+#### 数据转换器
 
 EasyHttp内部已经实现了默认的数据转换器，如果想自定义，可以通过以下接口实现：
 
@@ -280,7 +280,7 @@ public class DefaultStringResultConverter<T> implements ResultConverter<T, Respo
 
 从Response<String> 转换为泛型类型T。
 
-### 请求体拦截
+#### 请求体拦截
 
 ```
 setRequestBodyCreator(RequestBodyCreator creator)
