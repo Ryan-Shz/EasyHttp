@@ -1,5 +1,5 @@
 # EasyHttp
-EasyHttp is a http library based Retrofit and Rxjava.
+一个基于RxJava和Retrofit封装的网络请求库。链式调用，使用简单，提供丰富的操作符支撑各种功能的实现，灵活且高扩展。
 
 ## Usage
 
