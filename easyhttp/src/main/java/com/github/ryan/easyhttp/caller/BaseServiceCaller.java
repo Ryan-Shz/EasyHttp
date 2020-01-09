@@ -30,7 +30,7 @@ abstract class BaseServiceCaller implements ServiceCaller {
         if (interceptors != null && !interceptors.isEmpty()) {
             int headerInterceptorParamsSize = http.getHeaderInterceptorsParamsSize();
             int headerInnerParamsSize = params != null ? params.size() : 0;
-            if (headerInterceptorParamsSize > 0) {
+            if (headerInterceptorParamsSize >= 0) {
                 Map<String, Object> temp = params;
                 params = new ArrayMap<>(headerInterceptorParamsSize + headerInnerParamsSize);
                 if (headerInnerParamsSize > 0) {
@@ -51,7 +51,7 @@ abstract class BaseServiceCaller implements ServiceCaller {
         if (interceptors != null && !interceptors.isEmpty()) {
             int innerParamsSize = params != null ? params.size() : 0;
             int interceptorsSize = http.getInterceptorsParamsSize();
-            if (interceptorsSize > 0) {
+            if (interceptorsSize >= 0) {
                 Map<String, Object> temp = params;
                 params = new ArrayMap<>(interceptorsSize + innerParamsSize);
                 if (innerParamsSize > 0) {

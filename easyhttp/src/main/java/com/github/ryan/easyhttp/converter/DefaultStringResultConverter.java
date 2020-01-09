@@ -26,7 +26,7 @@ public class DefaultStringResultConverter<T> implements ResultConverter<T, Respo
         }
         String data = preProcessResult(original.body());
         if (data == null) {
-            return null;
+            throw new IllegalStateException("original data is null!");
         }
         if (mTargetClass == String.class) {
             return (T) data;
