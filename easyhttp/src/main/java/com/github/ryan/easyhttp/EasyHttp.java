@@ -111,8 +111,7 @@ public class EasyHttp<T> {
     }
 
     public static void setRetrofitBuilder(RetrofitBuilder builder) {
-        OkHttpClient client = builder.getClient();
-        Retrofit retrofit = RetrofitFactory.create(client);
+        Retrofit retrofit = RetrofitFactory.create(builder);
         RequestManager.getInstance().retrofit(retrofit);
     }
 
