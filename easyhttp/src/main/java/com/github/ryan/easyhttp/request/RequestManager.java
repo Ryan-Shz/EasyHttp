@@ -10,6 +10,9 @@ import com.github.ryan.easyhttp.chain.DefaultChainsList;
 import com.github.ryan.easyhttp.chain.download.DownloadChainsList;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 
 /**
@@ -42,7 +45,7 @@ public class RequestManager {
         } else {
             caller = new PostRequestCaller(retrofit);
         }
-        Observable observable = caller.call(http);
+        Observable observable = flat(http, caller);
         ChainsList<T> chains = new DefaultChainsList<>(http);
         return chains.start(observable);
     }
@@ -53,6 +56,17 @@ public class RequestManager {
         Observable observable = caller.call(http);
         ChainsList<T> chains = new DownloadChainsList<>(http);
         return chains.start(observable);
+    }
+
+    private Observable flat(EasyHttp http, final ServiceCaller caller){
+        return Observable.just(http)
+                .observeOn(Schedulers.io())
+                .flatMap(new Function<EasyHttp, ObservableSource<?>>() {
+                    @Override
+                    public ObservableSource<?> apply(EasyHttp vivoHttp) throws Exception {
+                        return caller.call(vivoHttp);
+                    }
+                });
     }
 
     // 获取可用的Retrofit对象

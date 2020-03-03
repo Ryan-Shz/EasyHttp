@@ -20,12 +20,12 @@ public class RealAsyncRequester extends BaseRequester implements AsyncRequester 
 
     @Override
     public void get() {
-        runOnExecutors(() -> RequestManager.getInstance().execute(getHttp(), RequestManager.METHOD_GET));
+        RequestManager.getInstance().execute(getHttp(), RequestManager.METHOD_GET);
     }
 
     @Override
     public void post() {
-        runOnExecutors(() -> RequestManager.getInstance().execute(getHttp(), RequestManager.METHOD_POST));
+        RequestManager.getInstance().execute(getHttp(), RequestManager.METHOD_POST);
     }
 
     @Override

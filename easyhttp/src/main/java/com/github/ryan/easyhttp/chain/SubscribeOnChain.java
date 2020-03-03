@@ -17,6 +17,8 @@ public class SubscribeOnChain extends BaseObservableChain {
 
     @Override
     public Observable process(Observable observable) {
-        return getHttp().isSyncRequest() ? observable : observable.subscribeOn(Schedulers.io());
+        return getHttp().isSyncRequest() ? observable : observable
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io());
     }
 }
