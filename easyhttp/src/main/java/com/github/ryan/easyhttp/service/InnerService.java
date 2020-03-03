@@ -21,13 +21,13 @@ import retrofit2.http.Url;
 public interface InnerService {
 
     @GET
-    Observable<Response<String>> get(@Url String url, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> fields);
+    Observable<Response<String>> get(@Url String url, @HeaderMap Map<String, Object> headers, @QueryMap Map<String, Object> fields);
 
     @POST
-    Observable<Response<String>> post(@Url String url, @HeaderMap Map<String, String> headers, @Body RequestBody requestBody);
+    Observable<Response<String>> post(@Url String url, @HeaderMap Map<String, Object> headers, @Body RequestBody requestBody);
 
     @Streaming
     @GET
-    Observable<Response<ResponseBody>> download(@Url String url, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> fields);
+    Observable<Response<ResponseBody>> download(@Url String url, @HeaderMap Map<String, Object> headers, @QueryMap Map<String, Object> fields);
 
 }

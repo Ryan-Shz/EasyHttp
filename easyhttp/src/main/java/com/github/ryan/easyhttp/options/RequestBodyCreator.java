@@ -10,6 +10,6 @@ import okhttp3.RequestBody;
  */
 public interface RequestBodyCreator {
 
-    RequestBody createRequestBody(Map<String, String> params);
+    RequestBody createRequestBody(Map<String, Object> params);
 
 }

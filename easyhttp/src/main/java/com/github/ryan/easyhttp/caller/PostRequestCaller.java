@@ -27,7 +27,7 @@ public class PostRequestCaller extends BaseServiceCaller {
 
     @Override
     public Observable call(EasyHttp http) {
-        Map<String, String> header = generateHeaderMap(http);
+        Map<String, Object> header = generateHeaderMap(http);
         RequestBody requestBody = processBody(http);
         final InnerService service = mRetrofit.create(InnerService.class);
         return service.post(http.getFullUrl(), header, requestBody);
@@ -37,7 +37,7 @@ public class PostRequestCaller extends BaseServiceCaller {
     private <T> RequestBody processBody(EasyHttp<T> http) {
         RequestBodyCreator creator = http.getRequestBodyCreator();
         RequestBody requestBody;
-        Map<String, String> params = generateParams(http);
+        Map<String, Object> params = generateParams(http);
         if (creator != null) {
             requestBody = creator.createRequestBody(params);
         } else {

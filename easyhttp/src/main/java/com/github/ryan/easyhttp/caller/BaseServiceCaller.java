@@ -24,7 +24,7 @@ abstract class BaseServiceCaller implements ServiceCaller {
 
     // 处理头部
     @SuppressWarnings("unchecked")
-    Map<String, String> generateHeaderMap(EasyHttp http) {
+    Map<String, Object> generateHeaderMap(EasyHttp http) {
         Map<String, Object> params = http.getInnerHeaderParams();
         List<ParamsInterceptor> interceptors = http.getHeaderParamsInterceptors();
         if (interceptors != null && !interceptors.isEmpty()) {
@@ -45,7 +45,7 @@ abstract class BaseServiceCaller implements ServiceCaller {
     }
 
     @SuppressWarnings("unchecked")
-    Map<String, String> generateParams(EasyHttp http) {
+    Map<String, Object> generateParams(EasyHttp http) {
         Map<String, Object> params = http.getInnerParams();
         List<ParamsInterceptor> interceptors = http.getParamsInterceptors();
         if (interceptors != null && !interceptors.isEmpty()) {
@@ -65,17 +65,10 @@ abstract class BaseServiceCaller implements ServiceCaller {
         return convert(params);
     }
 
-    private Map<String, String> convert(Map<String, Object> origin) {
+    private Map<String, Object> convert(Map<String, Object> origin) {
         if (origin == null) {
             return new ArrayMap<>();
         }
-        Map<String, String> result = new ArrayMap<>();
-        for (String key : origin.keySet()) {
-            Object value = origin.get(key);
-            if (value != null) {
-                result.put(key, String.valueOf(value));
-            }
-        }
-        return result;
+        return origin;
     }
 }
