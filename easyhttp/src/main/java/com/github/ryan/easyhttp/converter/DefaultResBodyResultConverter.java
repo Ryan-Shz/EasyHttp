@@ -30,6 +30,9 @@ public class DefaultResBodyResultConverter<T> implements ResultConverter<T, Resp
         if (mTargetClass == Response.class) {
             return (T) original;
         }
+        if (mTargetClass == okhttp3.Response.class) {
+            return (T) original.raw();
+        }
         ResponseBody data = original.body();
         if (data == null) {
             return null;

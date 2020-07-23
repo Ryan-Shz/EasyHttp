@@ -36,9 +36,12 @@ import retrofit2.Retrofit;
  */
 public class EasyHttp<T> {
 
+    private static final String METHOD_GET = "GET";
+    private static final String METHOD_POST = "POST";
     private String mBaseUrl;
     private String mPath;
     private String mFullUrl;
+    private String method;
     private Map<String, Object> mInnerParams;
     private Map<String, Object> mInnerHeaderParams;
     private LifecycleProvider mLifeProvider;
@@ -319,6 +322,29 @@ public class EasyHttp<T> {
         }
         return size;
     }
+
+    public EasyHttp<T> method(String method) {
+        this.method = method;
+        return this;
+    }
+
+    public void request() {
+        request(null);
+    }
+
+    public void request(HttpCallback<T> callback) {
+        switch (method) {
+            case METHOD_GET:
+                get(callback);
+                break;
+            case METHOD_POST:
+                post(callback);
+                break;
+            default:
+                break;
+        }
+    }
+
 
     public DownloadOptions getDownloadOptions() {
         return mDownloadOptions;
