@@ -1,7 +1,14 @@
 # EasyHttp
+[ ![Download](https://api.bintray.com/packages/ryan-shz/Ryan/easyhttp/images/download.svg) ](https://bintray.com/ryan-shz/Ryan/easyhttp/_latestVersion)![](https://img.shields.io/badge/license-MIT-green)
+
 一个基于RxJava和Retrofit封装的网络请求库。链式调用，使用简单，提供丰富的操作符支撑各种功能的实现，灵活且高扩展。
 
 ## Usage
+
+### Gradle
+```
+implementation 'com.ryan.github:easyhttp:0.9.0'
+```
 
 ### 初始化
 
