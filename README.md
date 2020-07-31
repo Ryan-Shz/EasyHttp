@@ -157,8 +157,19 @@ addHeaderParam(String key, Object value) // 添加头部参数
 头部参数则会被放入Http请求的Header中。
 
 #### 生命周期绑定
+EasyHttp通过with方法来绑定请求的生命周期，可绑定的对象有：
+* View，任意一个控件，EasyHttp请求将在控件从屏幕移除时自动取消
+* Activity，绑定到Activity上时，EasyHttp请求将在Activity destroy时自动取消
+* Fragment，绑定到Fragment时，EasyHttp请求将在Fragment destroy时自动取消
 
-EasyHttp通过rxlifecycle来管理请求的生命周期。提供以下两个配置方法：
+具体用法如下：
+```
+with(View view);
+with(Activity activity);
+with(Fragment);
+```
+
+EasyHttp也可以通过rxlifecycle来管理请求的生命周期，提供以下两个配置方法：
 
 ```
 bindLifecycle(LifecycleProvider provider)
@@ -171,7 +182,7 @@ bindLifecycle方法默认在Activity的onDestroy中解绑请求，如果需要�
 
 ```
 EasyHttp.from(TestResult.class)
-				.bindLifecycleUtilEvent(this.bindUntilEvent(ActivityEvent.PAUSE))
+	.bindLifecycleUtilEvent(this.bindUntilEvent(ActivityEvent.PAUSE))
 ```
 
 #### 参数拦截器
