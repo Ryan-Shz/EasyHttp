@@ -1,0 +1,16 @@
+apply plugin: 'com.novoda.bintray-release'
+
+//添加
+publish {
+    userOrg = 'ryan-shz'
+    repoName = 'Ryan'
+    groupId = 'com.ryan.github'
+    artifactId = 'easyhttp'
+    publishVersion = '0.9.1'
+    desc = 'EasyHttp是一个基于RxJava和Retrofit封装的网络请求库。链式调用，使用简单，提供丰富的操作符支撑各种功能的实现，灵活且高扩展。'
+    website = 'https://github.com/Ryan-Shz/EasyHttp'
+}
+
+tasks.withType(Javadoc).all {
+    enabled = false
+}

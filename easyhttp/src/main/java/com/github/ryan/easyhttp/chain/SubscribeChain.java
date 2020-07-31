@@ -26,7 +26,7 @@ public class SubscribeChain extends BaseObservableChain {
             return syncObservable;
         }
         syncObservable.observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver(getHttp().getHttpCallback()));
+                .subscribe(new BaseObserver(getHttp()));
         return null;
     }
 }

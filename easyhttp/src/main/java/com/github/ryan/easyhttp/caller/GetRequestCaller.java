@@ -21,10 +21,8 @@ public class GetRequestCaller extends BaseServiceCaller {
     @Override
     public Observable call(EasyHttp http) {
         final InnerService service = mRetrofit.create(InnerService.class);
-        Map<String, String> header = generateHeaderMap(http);
-        Map<String, String> queryMap = generateParams(http);
+        Map<String, Object> header = generateHeaderMap(http);
+        Map<String, Object> queryMap = generateParams(http);
         return service.get(http.getFullUrl(), header, queryMap);
     }
-
-
 }

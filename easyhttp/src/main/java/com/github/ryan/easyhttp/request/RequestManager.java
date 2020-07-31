@@ -63,8 +63,8 @@ public class RequestManager {
                 .observeOn(Schedulers.io())
                 .flatMap(new Function<EasyHttp, ObservableSource<?>>() {
                     @Override
-                    public ObservableSource<?> apply(EasyHttp vivoHttp) throws Exception {
-                        return caller.call(vivoHttp);
+                    public ObservableSource<?> apply(EasyHttp easyHttp) throws Exception {
+                        return caller.call(easyHttp);
                     }
                 });
     }

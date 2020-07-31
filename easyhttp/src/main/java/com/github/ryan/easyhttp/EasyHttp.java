@@ -1,7 +1,12 @@
 package com.github.ryan.easyhttp;
 
+import android.app.Activity;
+import android.support.v4.app.Fragment;
 import android.support.v4.util.ArrayMap;
+import android.view.View;
 
+import com.github.ryan.easyhttp.callback.RequestMapping;
+import com.github.ryan.easyhttp.lifecycle.LifecycleRegistry;
 import com.trello.rxlifecycle2.LifecycleProvider;
 import com.trello.rxlifecycle2.LifecycleTransformer;
 import com.github.ryan.easyhttp.callback.HttpCallback;
@@ -26,7 +31,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
 
@@ -42,6 +46,7 @@ public class EasyHttp<T> {
     private String mPath;
     private String mFullUrl;
     private String method;
+    private Object mTag = this;
     private Map<String, Object> mInnerParams;
     private Map<String, Object> mInnerHeaderParams;
     private LifecycleProvider mLifeProvider;
@@ -84,6 +89,28 @@ public class EasyHttp<T> {
         this.mPath = path;
         return this;
     }
+
+    public EasyHttp<T> with(Activity activity) {
+        LifecycleRegistry.handle(activity, this);
+        return this;
+    }
+
+    public EasyHttp<T> with(View view) {
+        LifecycleRegistry.handle(view, this);
+        return this;
+    }
+
+    public EasyHttp<T> with(Fragment fragment) {
+        LifecycleRegistry.handle(fragment, this);
+        return this;
+    }
+
+    public EasyHttp<T> setTag(Object tag) {
+        this.mTag = tag;
+        return this;
+    }
+
+
 
     public EasyHttp<T> addParam(String key, Object value) {
         ensureInnerParamsNotNull();
@@ -357,4 +384,17 @@ public class EasyHttp<T> {
     public LifecycleTransformer getLifeTransformer() {
         return mLifeTransformer;
     }
+
+    public static void cancelByTag(Object tag) {
+        RequestMapping.getInstance().cancelByTag(tag);
+    }
+
+    public static void cancelAll() {
+        RequestMapping.getInstance().cancelAll();
+    }
+
+    public Object getTag() {
+        return mTag;
+    }
+
 }

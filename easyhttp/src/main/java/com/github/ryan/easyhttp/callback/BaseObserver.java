@@ -1,5 +1,7 @@
 package com.github.ryan.easyhttp.callback;
 
+import com.github.ryan.easyhttp.EasyHttp;
+
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
@@ -12,13 +14,21 @@ import io.reactivex.disposables.Disposable;
 public class BaseObserver<T> implements Observer<T> {
 
     private IHttpCallback<T> mCallback;
+    private EasyHttp<T> mHttp;
 
-    public BaseObserver(IHttpCallback<T> callback) {
+    public BaseObserver(EasyHttp<T> http) {
+        mCallback = http.getHttpCallback();
+        mHttp = http;
+    }
+
+
+    public BaseObserver(EasyHttp<T> http, HttpCallback<T> callback) {
         mCallback = callback;
     }
 
     @Override
     public void onSubscribe(Disposable d) {
+        RequestMapping.getInstance().saveRequest(mHttp, d);
         if (mCallback != null) {
             mCallback.onStart();
         }
@@ -26,6 +36,7 @@ public class BaseObserver<T> implements Observer<T> {
 
     @Override
     public void onNext(T response) {
+        release();
         if (response == null) {
             return;
         }
@@ -37,6 +48,7 @@ public class BaseObserver<T> implements Observer<T> {
 
     @Override
     public void onError(Throwable e) {
+        release();
         if (mCallback != null) {
             mCallback.onFailure(e);
         }
@@ -45,5 +57,9 @@ public class BaseObserver<T> implements Observer<T> {
     @Override
     public void onComplete() {
 
+    }
+
+    private void release() {
+        RequestMapping.getInstance().removeRequest(mHttp);
     }
 }
