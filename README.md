@@ -20,10 +20,12 @@ OkHttpClient mBaseOkHttpClient = new OkHttpClient.Builder()
         .writeTimeout(10, TimeUnit.SECONDS)
         .connectTimeout(10, TimeUnit.SECONDS)
         .build();
-// 构建RetrofitBuilder
-RetrofitBuilder builder = new RetrofitBuilder().client(mBaseOkHttpClient);
+// 构建InitSettings
+InitSettings settings = new InitSettings.Builder()
+        .client(mBaseOkHttpClient)
+        .build();
 // 传递给EasyHttp完成初始化
-EasyHttp.setRetrofitBuilder(builder);
+EasyHttp.initialize(settings);
 ```
 
 ### 扩展EasyHttp类

@@ -3,6 +3,9 @@ package com.github.ryan.easyhttp.retrofit;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import okhttp3.OkHttpClient;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
@@ -15,21 +18,25 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class RetrofitFactory {
 
-    public static Retrofit create(RetrofitBuilder builder) {
-        if(builder == null){
-            throw new IllegalStateException("RetrofitBuilder is null!");
-        }
-        Converter.Factory factory = builder.getFactory();
-        if (factory == null) {
-            factory = GsonConverterFactory.create(createConverter());
+    public static Retrofit create(InitSettings builder) {
+        if (builder == null) {
+            throw new IllegalStateException("InitSettings is null!");
         }
         OkHttpClient client = builder.getClient();
-        return new Retrofit.Builder()
+        Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
                 .client(client)
                 .baseUrl("https://github.com/Ryan-Shz/")
-                .addConverterFactory(factory)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build();
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create());
+        List<Converter.Factory> factories = builder.getFactories();
+        if (factories == null) {
+            factories = new ArrayList<>();
+            factories.add(GsonConverterFactory.create(createConverter()));
+        } else {
+            for (Converter.Factory factory : factories) {
+                retrofitBuilder.addConverterFactory(factory);
+            }
+        }
+        return retrofitBuilder.build();
     }
 
     private static Gson createConverter() {
@@ -37,5 +44,4 @@ public class RetrofitFactory {
         builder.registerTypeAdapter(String.class, new Json2StringDeserializer());
         return builder.create();
     }
-
 }

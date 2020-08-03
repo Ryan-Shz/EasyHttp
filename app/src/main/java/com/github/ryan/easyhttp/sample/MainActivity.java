@@ -39,7 +39,7 @@ public class MainActivity extends EasyHttpActivity {
     }
 
     private void asyncRequestTest() {
-        TestHttp.from(TestResult.class)
+        TestHttp.target(TestResult.class)
                 .setFullUrl(TEST_API_URL)
                 .bindLifecycle(this)
                 .addParam("key1", "value1")
@@ -65,7 +65,7 @@ public class MainActivity extends EasyHttpActivity {
             @Override
             public void run() {
                 super.run();
-                String result = TestHttp.from(String.class)
+                String result = TestHttp.target(String.class)
                         .setFullUrl(TEST_API_URL)
                         .addParam("key1", "value1")
                         .addParam("key2", "value2")
@@ -78,7 +78,7 @@ public class MainActivity extends EasyHttpActivity {
 
     private void downloadFileAsync() {
         File targetFile = new File(getCacheDir(), "test");
-        TestHttp.from(File.class)
+        TestHttp.target(File.class)
                 .targetFile(targetFile)
                 .setFullUrl("http://pic18.nipic.com/20111223/2457331_222522032324_2.jpg")
                 .download(new DownloadCallback<File>() {
@@ -114,7 +114,7 @@ public class MainActivity extends EasyHttpActivity {
             public void run() {
                 super.run();
                 File targetFile = new File(getCacheDir(), "test");
-                File file = TestHttp.from(File.class)
+                File file = TestHttp.target(File.class)
                         .targetFile(targetFile)
                         .setFullUrl("http://pic18.nipic.com/20111223/2457331_222522032324_2.jpg")
                         .sync()

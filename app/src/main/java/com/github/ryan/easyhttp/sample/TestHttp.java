@@ -8,7 +8,7 @@ import com.github.ryan.easyhttp.EasyHttp;
  */
 public class TestHttp<T> extends EasyHttp<T> {
 
-    public static <T> TestHttp<T> from(Class<? extends T> targetClass) {
+    public static <T> TestHttp<T> target(Class<? extends T> targetClass) {
         return new TestHttp<>(targetClass);
     }
 

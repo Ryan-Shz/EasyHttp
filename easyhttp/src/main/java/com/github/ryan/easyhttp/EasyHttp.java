@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.github.ryan.easyhttp.callback.RequestMapping;
 import com.github.ryan.easyhttp.lifecycle.LifecycleRegistry;
+import com.github.ryan.easyhttp.retrofit.InitSettings;
 import com.trello.rxlifecycle2.LifecycleProvider;
 import com.trello.rxlifecycle2.LifecycleTransformer;
 import com.github.ryan.easyhttp.callback.HttpCallback;
@@ -23,7 +24,6 @@ import com.github.ryan.easyhttp.request.RealAsyncRequester;
 import com.github.ryan.easyhttp.request.RealSyncRequester;
 import com.github.ryan.easyhttp.request.RequestManager;
 import com.github.ryan.easyhttp.request.intf.SyncRequester;
-import com.github.ryan.easyhttp.retrofit.RetrofitBuilder;
 import com.github.ryan.easyhttp.retrofit.RetrofitFactory;
 
 import java.io.File;
@@ -62,10 +62,6 @@ public class EasyHttp<T> {
     private int mDelay;
     private DownloadOptions mDownloadOptions;
     private HttpCallback<T> mHttpCallback;
-
-    private static <T> EasyHttp<T> from(Class<? extends T> target) {
-        return new EasyHttp<>(target);
-    }
 
     protected EasyHttp(Class<? extends T> target) {
         if (target == File.class || target == ResponseBody.class) {
@@ -140,8 +136,8 @@ public class EasyHttp<T> {
         return this;
     }
 
-    public static void setRetrofitBuilder(RetrofitBuilder builder) {
-        Retrofit retrofit = RetrofitFactory.create(builder);
+    public static void initialize(InitSettings settings) {
+        Retrofit retrofit = RetrofitFactory.create(settings);
         RequestManager.getInstance().retrofit(retrofit);
     }
 
@@ -355,11 +351,11 @@ public class EasyHttp<T> {
         return this;
     }
 
-    public void request() {
-        request(null);
+    public void execute() {
+        execute(null);
     }
 
-    public void request(HttpCallback<T> callback) {
+    public void execute(HttpCallback<T> callback) {
         switch (method) {
             case METHOD_GET:
                 get(callback);
@@ -371,7 +367,6 @@ public class EasyHttp<T> {
                 break;
         }
     }
-
 
     public DownloadOptions getDownloadOptions() {
         return mDownloadOptions;

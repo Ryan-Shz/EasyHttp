@@ -3,7 +3,7 @@ package com.github.ryan.easyhttp.sample;
 import android.app.Application;
 
 import com.github.ryan.easyhttp.EasyHttp;
-import com.github.ryan.easyhttp.retrofit.RetrofitBuilder;
+import com.github.ryan.easyhttp.retrofit.InitSettings;
 
 import java.util.concurrent.TimeUnit;
 
@@ -23,7 +23,9 @@ public class App extends Application {
                 .writeTimeout(10, TimeUnit.SECONDS)
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .build();
-        RetrofitBuilder builder = new RetrofitBuilder().client(mBaseOkHttpClient);
-        EasyHttp.setRetrofitBuilder(builder);
+        InitSettings settings = new InitSettings.Builder()
+                .client(mBaseOkHttpClient)
+                .build();
+        EasyHttp.initialize(settings);
     }
 }
