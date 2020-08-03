@@ -7,7 +7,7 @@
 
 ### Gradle
 ```
-implementation 'com.ryan.github:easyhttp:0.9.0'
+implementation 'com.ryan.github:easyhttp:0.9.2'
 ```
 
 ### 初始化
@@ -35,7 +35,7 @@ EasyHttp.initialize(settings);
 ```
 public class TestHttp<T> extends EasyHttp<T> {
 
-    public static <T> TestHttp<T> from(Class<? extends T> targetClass) {
+    public static <T> TestHttp<T> target(Class<? extends T> targetClass) {
         return new TestHttp<>(targetClass);
     }
 
@@ -53,7 +53,7 @@ public class TestHttp<T> extends EasyHttp<T> {
 #### 异步请求
 
 ```
-TestHttp.from(TestResult.class)
+TestHttp.target(TestResult.class)
         .setFullUrl(TEST_API_URL)
         .bindLifecycle(this)
         .addParam("key1", "value1")
@@ -76,7 +76,7 @@ TestHttp.from(TestResult.class)
 #### 同步请求
 
 ```
-TestResult result = TestHttp.from(TestResult.class)
+TestResult result = TestHttp.target(TestResult.class)
         .setFullUrl(TEST_API_URL)
         .addParam("key1", "value1")
         .addParam("key2", "value2")
@@ -88,7 +88,7 @@ TestResult result = TestHttp.from(TestResult.class)
 
 ```
 File targetFile = new File(getCacheDir(), "test");
-TestHttp.from(File.class)
+TestHttp.target(File.class)
         .targetFile(targetFile)        
         .setFullUrl(TEST_FILE_URL)
         .download(new DownloadCallback<File>() {
@@ -119,7 +119,7 @@ TestHttp.from(File.class)
 
 ```
 File targetFile = new File(getCacheDir(), "test");
-File file = TestHttp.from(File.class)
+File file = TestHttp.target(File.class)
         .targetFile(targetFile)
         .setFullUrl(TEST_FILE_URL)
         .sync()
@@ -183,7 +183,7 @@ bindLifecycle(LifecycleProvider provider)方法需要传入一个lifecycleProvid
 bindLifecycle方法默认在Activity的onDestroy中解绑请求，如果需要自定义请求的解绑时机，可以通过bindLifecycleUtilEvent(LifecycleTransformer transformer)方法来实现，比如在Activity的onPause中解绑请求：
 
 ```
-EasyHttp.from(TestResult.class)
+EasyHttp.target(TestResult.class)
 	.bindLifecycleUtilEvent(this.bindUntilEvent(ActivityEvent.PAUSE))
 ```
 
@@ -231,11 +231,11 @@ EasyHttp.retrofit(Retrofit retrofit)
 #### 重试选项
 
 ```
-EasyHttp.from(TestResult.class)
-				.setRetryOptions(RetryOptions.from(int count, int delay))
+EasyHttp.target(TestResult.class)
+				.setRetryOptions(RetryOptions.target(int count, int delay))
 ```
 
-通过RetryOptions.from(int count, int delay)的方式来构建一个重试选项对象，它有两个参数：
+通过RetryOptions.target(int count, int delay)的方式来构建一个重试选项对象，它有两个参数：
 
 1. count: 重试次数 
 2. delay: 延迟多少ms后重试
@@ -267,9 +267,9 @@ sync()
 通过添加sync()操作符，可以让一个请求变成同步请求：
 
 ```
-EasyHttp.from(TestResult.class)
-				.sync()
-				.get();
+EasyHttp.target(TestResult.class)
+        .sync()
+        .get();
 ```
 
 #### 数据转换器
