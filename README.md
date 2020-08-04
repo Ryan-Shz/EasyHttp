@@ -55,9 +55,7 @@ public class TestHttp<T> extends EasyHttp<T> {
 ```
 TestHttp.target(TestResult.class)
         .setFullUrl(TEST_API_URL)
-        .bindLifecycle(this)
-        .addParam("key1", "value1")
-        .addParam("key2", "value2")
+        .addParam("key", "value")
         .get(new HttpCallback<TestResult>() {
             @Override
             public void onSuccess(TestResult result) {
@@ -78,8 +76,7 @@ TestHttp.target(TestResult.class)
 ```
 TestResult result = TestHttp.target(TestResult.class)
         .setFullUrl(TEST_API_URL)
-        .addParam("key1", "value1")
-        .addParam("key2", "value2")
+        .addParam("key", "value")
         .sync()
         .get();
 ```
@@ -148,6 +145,7 @@ setFullUrl(String url) // 设置完整路径
 addParam(String key, String value) // 添加普通参数
 addParams(Map<String, Object> params) // 添加参数集合
 addHeaderParam(String key, Object value) // 添加头部参数
+addParamsForEach(Map params) // 循环添加参数集合
 ```
 
 普通参数形式：
@@ -163,12 +161,14 @@ EasyHttp通过with方法来绑定请求的生命周期，可绑定的对象有�
 * View，任意一个控件，EasyHttp请求将在控件从屏幕移除时自动取消
 * Activity，绑定到Activity上时，EasyHttp请求将在Activity destroy时自动取消
 * Fragment，绑定到Fragment时，EasyHttp请求将在Fragment destroy时自动取消
+* Context，绑定到Context时，VivoHttp请求会自动根据Context类型在其销毁时自动取消
 
 具体用法如下：
 ```
-with(View view);
-with(Activity activity);
-with(Fragment);
+VivoHttp.target(TestResult.class)
+        .with(activity)
+        .setFullUrl(TEST_FILE_URL)
+        .post();
 ```
 
 EasyHttp也可以通过rxlifecycle来管理请求的生命周期，提供以下两个配置方法：
