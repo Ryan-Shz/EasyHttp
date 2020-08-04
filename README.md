@@ -161,11 +161,11 @@ EasyHttp通过with方法来绑定请求的生命周期，可绑定的对象有�
 * View，任意一个控件，EasyHttp请求将在控件从屏幕移除时自动取消
 * Activity，绑定到Activity上时，EasyHttp请求将在Activity destroy时自动取消
 * Fragment，绑定到Fragment时，EasyHttp请求将在Fragment destroy时自动取消
-* Context，绑定到Context时，VivoHttp请求会自动根据Context类型在其销毁时自动取消
+* Context，绑定到Context时，EasyHttp请求会自动根据Context类型在其销毁时自动取消
 
 具体用法如下：
 ```
-VivoHttp.target(TestResult.class)
+EasyHttp.target(TestResult.class)
         .with(activity)
         .setFullUrl(TEST_FILE_URL)
         .post();
