@@ -165,7 +165,7 @@ EasyHttp通过with方法来绑定请求的生命周期，可绑定的对象有�
 
 具体用法如下：
 ```
-EasyHttp.target(TestResult.class)
+TestHttp.target(TestResult.class)
         .with(activity)
         .setFullUrl(TEST_FILE_URL)
         .post();
@@ -183,8 +183,10 @@ bindLifecycle(LifecycleProvider provider)方法需要传入一个lifecycleProvid
 bindLifecycle方法默认在Activity的onDestroy中解绑请求，如果需要自定义请求的解绑时机，可以通过bindLifecycleUtilEvent(LifecycleTransformer transformer)方法来实现，比如在Activity的onPause中解绑请求：
 
 ```
-EasyHttp.target(TestResult.class)
+TestHttp.target(TestResult.class)
+        .setFullUrl(TEST_API_URL)
 	.bindLifecycleUtilEvent(this.bindUntilEvent(ActivityEvent.PAUSE))
+	.post();
 ```
 
 #### 参数拦截器
@@ -225,14 +227,19 @@ public interface ParamsInterceptor {
 EasyHttp使用Retrofit来发起请求，每个请求都可以指定一个自定义的retrofit对象来发起请求。
 
 ```
-EasyHttp.retrofit(Retrofit retrofit)
+TestHttp.target(TestResult.class)
+        .setFullUrl(TEST_API_URL)
+	.retrofit(Retrofit retrofit)
+	.post();
 ```
 
 #### 重试选项
 
 ```
-EasyHttp.target(TestResult.class)
-				.setRetryOptions(RetryOptions.target(int count, int delay))
+TestHttp.target(TestResult.class)
+        .setFullUrl(TEST_API_URL)
+        .setRetryOptions(RetryOptions.target(int count, int delay))
+	.post();
 ```
 
 通过RetryOptions.target(int count, int delay)的方式来构建一个重试选项对象，它有两个参数：
@@ -260,7 +267,7 @@ targetFile(File targetFile)
 
 #### 同步请求选项
 
-```d
+```
 sync()
 ```
 
