@@ -15,14 +15,14 @@ implementation 'com.ryan.github:easyhttp:0.9.2'
 EasyHttp使用Retrofit来执行网络请求。在开始请求之前，我们需要先对EasyHttp做一些初始化工作，主要用来指定Retrofit对象的构建选项：
 
 ```
-OkHttpClient mBaseOkHttpClient = new OkHttpClient.Builder()
+OkHttpClient client = new OkHttpClient.Builder()
         .readTimeout(10, TimeUnit.SECONDS)
         .writeTimeout(10, TimeUnit.SECONDS)
         .connectTimeout(10, TimeUnit.SECONDS)
         .build();
 // 构建InitSettings
 InitSettings settings = new InitSettings.Builder()
-        .client(mBaseOkHttpClient)
+        .client(client)
         .build();
 // 传递给EasyHttp完成初始化
 EasyHttp.initialize(settings);

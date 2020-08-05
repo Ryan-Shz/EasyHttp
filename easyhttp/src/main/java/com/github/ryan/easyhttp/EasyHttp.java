@@ -1,6 +1,7 @@
 package com.github.ryan.easyhttp;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.ArrayMap;
 import android.view.View;
@@ -98,6 +99,11 @@ public class EasyHttp<T> {
 
     public EasyHttp<T> with(Fragment fragment) {
         LifecycleRegistry.handle(fragment, this);
+        return this;
+    }
+
+    public EasyHttp<T> with(Context context) {
+        LifecycleRegistry.handle(context, this);
         return this;
     }
 

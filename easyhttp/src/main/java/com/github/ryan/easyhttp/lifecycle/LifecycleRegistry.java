@@ -4,9 +4,11 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 
@@ -37,13 +39,30 @@ public class LifecycleRegistry {
 
     public static void handle(View view, final EasyHttp http) {
         Context context = view.getContext();
-        if (context instanceof Activity) {
-            handle((Activity) context, http);
-        }
+        handle(context, http);
     }
 
     public static void handle(Fragment fragment, final EasyHttp http) {
+        if (fragment == null) {
+            Log.e(TAG, "fragment is null, can't bind lifecycle.");
+            return;
+        }
         handle(fragment.getActivity(), http);
+    }
+
+    public static void handle(Context context, final EasyHttp http) {
+        if (context == null) {
+            throw new IllegalArgumentException("You cannot start a load on a null Context");
+        }
+        if (context instanceof FragmentActivity) {
+            handle((FragmentActivity) context, http);
+        } else if (context instanceof Activity) {
+            handle((Activity) context, http);
+        } else if (context instanceof ContextWrapper) {
+            handle(((ContextWrapper) context).getBaseContext(), http);
+        } else {
+            Log.d(TAG, "context is invalid, do nothing.");
+        }
     }
 
     public static void handle(Activity activity, final EasyHttp http) {
