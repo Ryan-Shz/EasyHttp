@@ -1,13 +1,13 @@
 package com.github.ryan.easyhttp.chain;
 
-import android.support.annotation.NonNull;
-
 import com.github.ryan.easyhttp.EasyHttp;
+import com.github.ryan.easyhttp.callback.BaseObserver;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by Ryan
@@ -18,7 +18,7 @@ public abstract class BaseChainsList<T> implements ChainsList<T> {
     private List<ObservableChain> mChainList;
     private EasyHttp mHttp;
 
-    protected BaseChainsList(@NonNull EasyHttp http) {
+    protected BaseChainsList(EasyHttp http) {
         mHttp = http;
         mChainList = new ArrayList<>();
         initBaseChains();
@@ -48,6 +48,19 @@ public abstract class BaseChainsList<T> implements ChainsList<T> {
     @SuppressWarnings("unchecked")
     @Override
     public T start(Observable observable) {
+        Observable current = wrap(observable);
+        if (mHttp.isSyncRequest()) {
+            return (T) current.blockingFirst();
+        }
+        if (mHttp.isCallbackOnMainThread()) {
+            current = current.observeOn(AndroidSchedulers.mainThread());
+        }
+        current.subscribe(new BaseObserver(getHttp()));
+        return null;
+    }
+
+    @Override
+    public Observable wrap(Observable observable) {
         Observable current = observable;
         for (ObservableChain chain : mChainList) {
             current = chain.process(current);
@@ -55,10 +68,6 @@ public abstract class BaseChainsList<T> implements ChainsList<T> {
                 break;
             }
         }
-        if (current != null) {
-            return (T) current.blockingFirst();
-        }
-        return null;
+        return current;
     }
-
 }

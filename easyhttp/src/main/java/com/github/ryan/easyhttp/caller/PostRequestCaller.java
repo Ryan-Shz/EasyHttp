@@ -34,7 +34,7 @@ public class PostRequestCaller extends BaseServiceCaller {
     }
 
     // 处理请求体
-    private <T> RequestBody processBody(EasyHttp<T> http) {
+    private <T> RequestBody processBody(EasyHttp http) {
         RequestBodyCreator creator = http.getRequestBodyCreator();
         RequestBody requestBody;
         Map<String, Object> params = generateParams(http);

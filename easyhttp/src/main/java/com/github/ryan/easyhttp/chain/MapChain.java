@@ -11,22 +11,15 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
  * Created by Ryan
  * at 2019/9/21
  */
-public class SubscribeChain extends BaseObservableChain {
+public class MapChain extends BaseObservableChain {
 
-    SubscribeChain(EasyHttp http) {
+    MapChain(EasyHttp http) {
         super(http);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public Observable process(Observable observable) {
-        boolean isSync = getHttp().isSyncRequest();
-        Observable syncObservable = observable.map(new StringResultConverter<>(getHttp().getResultConverter()));
-        if (isSync) {
-            return syncObservable;
-        }
-        syncObservable.observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver(getHttp()));
-        return null;
+        return observable.map(new StringResultConverter<>(getHttp().getResultConverter()));
     }
 }

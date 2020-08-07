@@ -15,6 +15,6 @@ public class DefaultChainsList<T> extends BaseChainsList<T> {
     @Override
     protected void initExtendChains() {
         addChain(new StringResPreprocessorChain(getHttp()));
-        addChain(new SubscribeChain(getHttp()));
+        addChain(new MapChain(getHttp()));
     }
 }
