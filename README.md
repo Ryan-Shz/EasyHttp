@@ -7,7 +7,7 @@
 
 ### Gradle
 ```
-implementation 'com.ryan.github:easyhttp:0.9.2'
+implementation 'com.ryan.github:easyhttp:0.9.3'
 ```
 
 ### 初始化
