@@ -6,7 +6,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.github.ryan.easyhttp.EasyHttpActivity;
+import com.github.ryan.easyhttp.lifecycle.EasyHttpActivity;
 import com.github.ryan.easyhttp.callback.DownloadCallback;
 import com.github.ryan.easyhttp.callback.HttpCallback;
 
@@ -45,7 +45,7 @@ public class MainActivity extends EasyHttpActivity {
                 .addParam("key1", "value1")
                 .addParam("key2", "value2")
                 .setResultConverter(new TestResultConverter<>(Response.class))
-                .get(new HttpCallback<TestResult>() {
+                .callback(new HttpCallback<TestResult>() {
                     @Override
                     public void onSuccess(TestResult result) {
                         super.onSuccess(result);
@@ -57,7 +57,7 @@ public class MainActivity extends EasyHttpActivity {
                         super.onFailure(e);
                         toast(e.getMessage());
                     }
-                });
+                }).get();
     }
 
     private void syncRequestTest() {
