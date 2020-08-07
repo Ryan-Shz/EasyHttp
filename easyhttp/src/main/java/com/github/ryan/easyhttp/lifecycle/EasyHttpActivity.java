@@ -1,4 +1,4 @@
-package com.github.ryan.easyhttp;
+package com.github.ryan.easyhttp.lifecycle;
 
 import android.os.Bundle;
 import android.support.annotation.CallSuper;

@@ -1,4 +1,4 @@
-package com.github.ryan.easyhttp;
+package com.github.ryan.easyhttp.lifecycle;
 
 import android.content.Context;
 import android.os.Bundle;
