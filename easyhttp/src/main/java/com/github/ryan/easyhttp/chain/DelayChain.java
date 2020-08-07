@@ -18,7 +18,8 @@ public class DelayChain extends BaseObservableChain {
 
     @Override
     public Observable process(Observable observable) {
-        int delay = getHttp().getDelay();
-        return delay > 0 ? observable.delay(delay, TimeUnit.MILLISECONDS) : observable;
+        EasyHttp http = getHttp();
+        int delay = http.getDelay();
+        return delay > 0 ? observable.delay(delay, http.getDelayTimeUnit()) : observable;
     }
 }

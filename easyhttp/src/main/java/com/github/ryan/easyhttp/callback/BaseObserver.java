@@ -2,6 +2,9 @@ package com.github.ryan.easyhttp.callback;
 
 import com.github.ryan.easyhttp.EasyHttp;
 
+import java.util.Collections;
+import java.util.List;
+
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
@@ -14,21 +17,30 @@ import io.reactivex.disposables.Disposable;
 public class BaseObserver<T> implements Observer<T> {
 
     private IHttpCallback<T> mCallback;
-    private EasyHttp<T> mHttp;
+    private List<Object> mTagList;
 
     public BaseObserver(EasyHttp<T> http) {
-        mCallback = http.getHttpCallback();
-        mHttp = http;
+        if (http != null) {
+            mTagList = Collections.singletonList(http.getTag());
+            mCallback = http.getHttpCallback();
+        }
     }
 
-
-    public BaseObserver(EasyHttp<T> http, HttpCallback<T> callback) {
+    public BaseObserver(IHttpCallback<T> callback, Object tag) {
         mCallback = callback;
+        if (tag != null) {
+            mTagList = Collections.singletonList(tag);
+        }
+    }
+
+    public BaseObserver(IHttpCallback<T> callback, List<Object> tags) {
+        mCallback = callback;
+        mTagList = tags;
     }
 
     @Override
     public void onSubscribe(Disposable d) {
-        RequestMapping.getInstance().saveRequest(mHttp, d);
+        startRequest(d);
         if (mCallback != null) {
             mCallback.onStart();
         }
@@ -36,11 +48,11 @@ public class BaseObserver<T> implements Observer<T> {
 
     @Override
     public void onNext(T response) {
-        release();
-        if (response == null) {
+        if (mCallback == null) {
             return;
         }
-        if (mCallback == null) {
+        if (response == null) {
+            mCallback.onFailure(new IllegalArgumentException("response is null!"));
             return;
         }
         mCallback.onSuccess(response);
@@ -48,18 +60,35 @@ public class BaseObserver<T> implements Observer<T> {
 
     @Override
     public void onError(Throwable e) {
-        release();
-        if (mCallback != null) {
-            mCallback.onFailure(e);
+        try {
+            if (mCallback != null) {
+                mCallback.onFailure(e);
+            }
+        } finally {
+            finishRequest();
         }
     }
 
     @Override
     public void onComplete() {
-
+        finishRequest();
     }
 
-    private void release() {
-        RequestMapping.getInstance().removeRequest(mHttp);
+    private void startRequest(Disposable d) {
+        if (mTagList == null) {
+            return;
+        }
+        for (Object tag : mTagList) {
+            RequestMapping.getInstance().beginRequest(tag, d);
+        }
+    }
+
+    private void finishRequest() {
+        if (mTagList == null) {
+            return;
+        }
+        for (Object tag : mTagList) {
+            RequestMapping.getInstance().finishRequest(tag);
+        }
     }
 }

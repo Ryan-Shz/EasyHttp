@@ -33,9 +33,8 @@ public class DownloadSubscribeChain extends BaseObservableChain {
         }
         DownloadOptions options = http.getDownloadOptions();
         DownloadCallback callback = options.getCallback();
-        syncObservable
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver(getHttp(), callback));
+        syncObservable.observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new BaseObserver(callback, getHttp().getTag()));
         return null;
     }
 }

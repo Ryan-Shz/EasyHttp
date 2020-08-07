@@ -10,4 +10,5 @@ public interface ChainsList<T> {
 
     T start(Observable observable);
 
+    Observable wrap(Observable observable);
 }

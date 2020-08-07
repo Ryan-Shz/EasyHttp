@@ -1,7 +1,5 @@
 package com.github.ryan.easyhttp.callback;
 
-import com.github.ryan.easyhttp.EasyHttp;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -25,18 +23,19 @@ public class RequestMapping {
         private static final RequestMapping INSTANCE = new RequestMapping();
     }
 
-    void saveRequest(EasyHttp http, Disposable disposable) {
-        if (http == null || http.getTag() == null) {
+    void beginRequest(Object tag, Disposable disposable) {
+        if (tag == null) {
             return;
         }
-        mRequestMap.put(http.getTag(), disposable);
+        mRequestMap.put(tag, disposable);
     }
 
-    void removeRequest(EasyHttp http) {
-        if (http == null || http.getTag() == null) {
+    void finishRequest(Object tag) {
+        if (tag == null) {
             return;
         }
-        cancelByTag(http.getTag());
+        // just remove
+        mRequestMap.remove(tag);
     }
 
     public void cancelByTag(Object tag) {
