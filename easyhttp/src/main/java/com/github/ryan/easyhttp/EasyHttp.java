@@ -8,6 +8,10 @@ import android.view.View;
 
 import com.github.ryan.easyhttp.callback.RequestMapping;
 import com.github.ryan.easyhttp.lifecycle.LifecycleRegistry;
+import com.github.ryan.easyhttp.request.RealMergeRequester;
+import com.github.ryan.easyhttp.request.RealTripleRequester;
+import com.github.ryan.easyhttp.request.intf.MergeRequester;
+import com.github.ryan.easyhttp.request.intf.TripleRequester;
 import com.github.ryan.easyhttp.retrofit.InitSettings;
 import com.trello.rxlifecycle2.LifecycleProvider;
 import com.trello.rxlifecycle2.LifecycleTransformer;
@@ -31,7 +35,9 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
 import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
 
@@ -61,8 +67,12 @@ public class EasyHttp<T> {
     private ResponsePreprocessor mResponsePreprocessor;
     private boolean mSyncRequest = false;
     private int mDelay;
+    private TimeUnit mDelayTimeUnit;
+    private int mInterval;
+    private TimeUnit mIntervalTimeUnit;
     private DownloadOptions mDownloadOptions;
     private HttpCallback<T> mHttpCallback;
+    private boolean mCallbackOnMainThread = true;
 
     protected EasyHttp(Class<? extends T> target) {
         if (target == File.class || target == ResponseBody.class) {
@@ -111,8 +121,6 @@ public class EasyHttp<T> {
         this.mTag = tag;
         return this;
     }
-
-
 
     public EasyHttp<T> addParam(String key, Object value) {
         ensureInnerParamsNotNull();
@@ -187,22 +195,25 @@ public class EasyHttp<T> {
         return this;
     }
 
-    public EasyHttp<T> setDelay(int delay) {
+    public EasyHttp<T> delay(int delay, TimeUnit unit) {
         mDelay = delay;
+        mDelayTimeUnit = unit;
+        return this;
+    }
+
+    public EasyHttp<T> interval(int interval, TimeUnit unit) {
+        mInterval = interval;
+        mIntervalTimeUnit = unit;
         return this;
     }
 
     public void post() {
-        post(null);
-    }
-
-    public void post(HttpCallback<T> callback) {
-        mHttpCallback = callback;
+        method(METHOD_POST);
         new RealAsyncRequester(this).post();
     }
 
-    public void get(HttpCallback<T> callback) {
-        mHttpCallback = callback;
+    public void get() {
+        method(METHOD_GET);
         new RealAsyncRequester(this).get();
     }
 
@@ -358,20 +369,24 @@ public class EasyHttp<T> {
     }
 
     public void execute() {
-        execute(null);
-    }
-
-    public void execute(HttpCallback<T> callback) {
         switch (method) {
             case METHOD_GET:
-                get(callback);
+                get();
                 break;
             case METHOD_POST:
-                post(callback);
+                post();
                 break;
             default:
                 break;
         }
+    }
+
+    public <V> MergeRequester<T, V> merge(EasyHttp<V> v) {
+        return new RealMergeRequester<>(this, v);
+    }
+
+    public <V, W> TripleRequester<T, V, W> merge(EasyHttp<V> v, EasyHttp<W> r) {
+        return new RealTripleRequester<>(this, v, r);
     }
 
     public DownloadOptions getDownloadOptions() {
@@ -398,4 +413,37 @@ public class EasyHttp<T> {
         return mTag;
     }
 
+    public String getMethod() {
+        return method;
+    }
+
+    public EasyHttp<T> callback(HttpCallback<T> callback) {
+        mHttpCallback = callback;
+        return this;
+    }
+
+    public int getInterval() {
+        return mInterval;
+    }
+
+    public TimeUnit getIntervalTimeUnit() {
+        return mIntervalTimeUnit;
+    }
+
+    public TimeUnit getDelayTimeUnit() {
+        return mDelayTimeUnit;
+    }
+
+    public Observable toObservable() {
+        return RequestManager.getInstance().wrapObservable(this);
+    }
+
+    public EasyHttp<T> setCallbackOnMainThread(boolean callbackOnMainThread) {
+        this.mCallbackOnMainThread = callbackOnMainThread;
+        return this;
+    }
+
+    public boolean isCallbackOnMainThread() {
+        return mCallbackOnMainThread;
+    }
 }

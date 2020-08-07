@@ -12,20 +12,18 @@ import java.util.concurrent.Executors;
  */
 public class RealAsyncRequester extends BaseRequester implements AsyncRequester {
 
-    private static final ExecutorService sExecutor = Executors.newCachedThreadPool();
-
     public RealAsyncRequester(EasyHttp http) {
         super(http);
     }
 
     @Override
     public void get() {
-        RequestManager.getInstance().execute(getHttp(), RequestManager.METHOD_GET);
+        RequestManager.getInstance().execute(getHttp());
     }
 
     @Override
     public void post() {
-        RequestManager.getInstance().execute(getHttp(), RequestManager.METHOD_POST);
+        RequestManager.getInstance().execute(getHttp());
     }
 
     @Override
@@ -34,9 +32,5 @@ public class RealAsyncRequester extends BaseRequester implements AsyncRequester 
             throw new IllegalStateException();
         }
         RequestManager.getInstance().download(getHttp());
-    }
-
-    private void runOnExecutors(Runnable runnable) {
-        sExecutor.execute(runnable);
     }
 }
