@@ -33,15 +33,15 @@ abstract class BaseServiceCaller implements ServiceCaller {
             if (headerInterceptorParamsSize >= 0) {
                 Map<String, Object> temp = params;
                 params = new ArrayMap<>(headerInterceptorParamsSize + headerInnerParamsSize);
-                if (headerInnerParamsSize > 0) {
-                    params.putAll(temp);
-                }
                 for (ParamsInterceptor interceptor : interceptors) {
                     interceptor.process(params);
                 }
+                if (headerInnerParamsSize > 0) {
+                    params.putAll(temp);
+                }
             }
         }
-        return convert(params);
+        return params == null ? new ArrayMap<>() : params;
     }
 
     @SuppressWarnings("unchecked")
@@ -54,21 +54,15 @@ abstract class BaseServiceCaller implements ServiceCaller {
             if (interceptorsSize >= 0) {
                 Map<String, Object> temp = params;
                 params = new ArrayMap<>(interceptorsSize + innerParamsSize);
-                if (innerParamsSize > 0) {
-                    params.putAll(temp);
-                }
+                // 先添加参数拦截器中的参数
                 for (ParamsInterceptor interceptor : interceptors) {
                     interceptor.process(params);
                 }
+                if (innerParamsSize > 0) {
+                    params.putAll(temp);
+                }
             }
         }
-        return convert(params);
-    }
-
-    private Map<String, Object> convert(Map<String, Object> origin) {
-        if (origin == null) {
-            return new ArrayMap<>();
-        }
-        return origin;
+        return params == null ? new ArrayMap<>() : params;
     }
 }
