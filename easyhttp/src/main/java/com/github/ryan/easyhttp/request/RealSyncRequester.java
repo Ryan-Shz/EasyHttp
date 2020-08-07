@@ -15,12 +15,12 @@ public class RealSyncRequester<T> extends BaseRequester implements SyncRequester
 
     @Override
     public T get() {
-        return RequestManager.getInstance().execute(getHttp(), RequestManager.METHOD_GET);
+        return RequestManager.getInstance().execute(getHttp());
     }
 
     @Override
     public T post() {
-        return RequestManager.getInstance().execute(getHttp(), RequestManager.METHOD_POST);
+        return RequestManager.getInstance().execute(getHttp());
     }
 
     @Override
